@@ -1,0 +1,12 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<link th:href="@{/styles/navbar.css}" rel="stylesheet" />
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-nav">
+        <a href="/" class="nav-item nav-link">Home</a>
+        <a href="/logout" class="nav-item nav-link">Logout</a>
+    </div>
+    <div class="user-panel">
+        <p>Logged as [[${#httpServletRequest.remoteUser}]]</p>
+    </div>
+</nav>
+</html>
