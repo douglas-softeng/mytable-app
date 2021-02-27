@@ -2,26 +2,30 @@ package com.douglas.softeng.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.douglas.softeng.model.User;
-import com.douglas.softeng.service.facades.UserFacade;
+import com.douglas.softeng.service.facades.ApiClient;
 
 @Service
 public class UserService {
 	
-	private final UserFacade userFacade;
+	@Value("${api.url}")
+	private String apiUrl;
+	private ApiClient<User> apiClient;
 	
-	@Autowired
-	public UserService(UserFacade userFacade) {
-		this.userFacade = userFacade;
+	@PostConstruct
+	private void initClient() {
+		apiClient = new ApiClient<>(apiUrl + "v1/user", User.class);
 	}
 	
 	public List<User> listUsers() {
-		return userFacade.listUsers();
+		return apiClient.doGetAll();
 	}
 	
 	public User findUser(String id) {
@@ -29,7 +33,7 @@ public class UserService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		
-		return userFacade.findUser(id);
+		return apiClient.doGetOne(id);
 	}
 	
 	public User createUser(User user) {
@@ -37,7 +41,7 @@ public class UserService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		
-		return userFacade.createUser(user);
+		return apiClient.doPost(user, "/create");
 	}
 	
 	public User updateUser(String id, User user) {
@@ -45,7 +49,7 @@ public class UserService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		
-		return userFacade.updateUser(id, user);
+		return apiClient.doPut(user, id);
 	}
 	
 	public void deleteUser(String id) {
@@ -53,7 +57,7 @@ public class UserService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		
-		userFacade.deleteUser(id);
+		apiClient.doDelete(id);
 	}
 
 }
