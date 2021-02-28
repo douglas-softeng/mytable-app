@@ -5,12 +5,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication 
 @EnableAutoConfiguration
 @ComponentScan(basePackages={"com.douglas.softeng"})
-@EnableTransactionManagement
 @EntityScan(basePackages="com.douglas.softeng.model")
 public class MyTableUiApplication {
 
